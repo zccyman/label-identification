@@ -16,4 +16,9 @@ python do_xml.py
 ```
 sh train.sh
 ```
+
+### predict
+'''
+python mytrain/shape_predictor.py
+'''
  
