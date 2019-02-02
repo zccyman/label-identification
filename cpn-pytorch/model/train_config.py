@@ -15,9 +15,9 @@ class Config:
     vis = 0
     model = 'CPN50'
 
-    lr = 0.01
+    lr = 0.1
     lr_gamma = 0.1
-    lr_dec_epoch = list(range(6,1280,20))
+    lr_dec_epoch = list(range(6,2560,400))
 
     batch_size = 16
     weight_decay = 1e-5
