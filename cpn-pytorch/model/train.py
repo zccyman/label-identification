@@ -131,7 +131,7 @@ def train(train_loader, model, criterions, optimizer):
         refine_loss = criterion2(refine_output, refine_target_var)
         refine_loss = refine_loss.mean(dim=3).mean(dim=2)
         refine_loss *= (valid_var > 0.1).type(torch.cuda.FloatTensor)
-        refine_loss = ohkm(refine_loss, 1)
+        refine_loss = ohkm(refine_loss, 10)
         loss += refine_loss
         refine_loss_record = refine_loss.data.item()
 
@@ -156,7 +156,7 @@ if __name__ == '__main__':
                         help='number of data loading workers (default: 12)')
     parser.add_argument('-g', '--num_gpus', default=1, type=int, metavar='N',
                         help='number of GPU to use (default: 1)')    
-    parser.add_argument('--epochs', default=128, type=int, metavar='N',
+    parser.add_argument('--epochs', default=1280, type=int, metavar='N',
                         help='number of total epochs to run (default: 32)')
     parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                         help='manual epoch number (useful on restarts)')

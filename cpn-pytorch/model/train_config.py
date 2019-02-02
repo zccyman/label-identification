@@ -15,9 +15,9 @@ class Config:
     vis = 0
     model = 'CPN50'
 
-    lr = 5e-4
-    lr_gamma = 0.5
-    lr_dec_epoch = list(range(6,40,6))
+    lr = 0.01
+    lr_gamma = 0.1
+    lr_dec_epoch = list(range(6,1280,20))
 
     batch_size = 16
     weight_decay = 1e-5
@@ -36,8 +36,8 @@ class Config:
 
     pixel_means = np.array([122.7717, 115.9465, 102.9801]) # RGB
     
-    data_shape = (256, 192) #(h, w)
-    output_shape = (64, 48)
+    data_shape = (192, 256) #(h, w)
+    output_shape = (48, 64)
     featuremap_scale = 4
     gaussain_kernel = (7, 7)
     

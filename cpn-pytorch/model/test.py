@@ -104,7 +104,7 @@ if __name__ == '__main__':
                         help='flip input image during test (default: True)')
     parser.add_argument('-b', '--batch', default=1, type=int,
                         help='test batch size (default: 128)')
-    parser.add_argument('-t', '--test', default='epoch10checkpoint', type=str,
+    parser.add_argument('-t', '--test', default='epoch52checkpoint', type=str,
                         help='using which checkpoint to be tested (default: CPN256x192')
     parser.add_argument('-r', '--result', default='result', type=str,
                         help='path to save save result (default: result)')

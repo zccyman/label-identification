@@ -22,8 +22,8 @@ class Config:
 
     pixel_means = np.array([122.7717, 115.9465, 102.9801]) # RGB
 	
-    data_shape = (256, 192)
-    output_shape = (64, 48)
+    data_shape = (192, 256) #h w
+    output_shape = (48, 64)
     featuremap_scale = 4
 
 cfg = Config()
