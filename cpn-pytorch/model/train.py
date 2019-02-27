@@ -9,6 +9,8 @@ import torch.backends.cudnn as cudnn
 import torch.optim
 import torchvision.datasets as datasets
 
+from torchviz import make_dot, make_dot_from_trace
+
 from train_config import cfg
 from utils.logger import Logger
 from utils.evaluation import accuracy, AverageMeter, final_preds
@@ -17,6 +19,12 @@ from utils.osutils import mkdir_p, isfile, isdir, join
 from utils.transforms import fliplr, flip_back
 from networks import network 
 from dataloader.KPloader import KPloader
+from adabound import AdaBound
+
+def net_vision(model, args):
+    input = torch.rand(1, args.channels, args.height, args.width)
+    g = make_dot(model(input), params=dict(model.named_parameters()))
+    g.view()
 
 def main(args):
     # create checkpoint dir
@@ -27,10 +35,18 @@ def main(args):
     model = network.__dict__[cfg.model](cfg.output_shape, cfg.num_class, pretrained = True)
     model = torch.nn.DataParallel(model).cuda()
 
+    # show net
+    args.channels = 3
+    args.height = cfg.data_shape[0]
+    args.width = cfg.data_shape[1]
+    #net_vision(model, args)
+
     # define loss function (criterion) and optimizer
     criterion1 = torch.nn.MSELoss().cuda() # for Global loss
     criterion2 = torch.nn.MSELoss(reduce=False).cuda() # for refine loss
-    optimizer = torch.optim.Adam(model.parameters(),
+
+    #torch.optim.Adam
+    optimizer = AdaBound(model.parameters(),
                                 lr = cfg.lr,
                                 weight_decay=cfg.weight_decay)
     
@@ -121,9 +137,13 @@ def train(train_loader, model, criterions, optimizer):
         global_loss_record = 0.
         refine_loss_record = 0.
         # comput global loss and refine loss
+        #i_loss = 0
         for global_output, label in zip(global_outputs, targets):
             num_points = global_output.size()[1]
+            #print("num_points: ", num_points)
             global_label = label * (valid > 1.1).type(torch.FloatTensor).view(-1, num_points, 1, 1)
+            #print(global_label, i_loss)
+            #i_loss = i_loss + 1
             global_loss = criterion1(global_output, torch.autograd.Variable(global_label.cuda(async=True))) / 2.0
             loss += global_loss
             global_loss_record += global_loss.data.item()
