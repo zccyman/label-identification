@@ -2,7 +2,7 @@
 
 ## Train Model with PTS DataFormat
 
-### prepare data
+### Prepare data
 - cpn-pytorch/data/train/
     - *.jpg
     - *.pts
