@@ -1,6 +1,6 @@
 # PyTorch CPN(Cascaded Pyramid Network) 
 
-## Train Model With PTS DataFormat
+## Train Model with PTS DataFormat
 
 ### prepare data
 - cpn-pytorch/data/train/
