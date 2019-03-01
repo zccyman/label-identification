@@ -23,17 +23,20 @@ def create_csv(files_in, files_out, key_nums, is_train):
             im = im.split("." + postfix)[0]
             
             if is_train:
+                pts_name = os.path.join(files_in, im + '.pts')
+                fpts = open(pts_name,'r')
+                fptsLines = fpts.readlines()            
+                print(pts_name, len(fptsLines))
+                if (key_nums + 4) != len(fptsLines):
+                    continue
+
                 f.write(im + ".jpg,")
                 for i in range(4):
                     if 3 == i:
                         f.write(str(0) + ",")
                     else:
                         f.write(str(0) + " ")
-                
-                pts_name = os.path.join(files_in, im + '.pts')
-                fpts = open(pts_name,'r')
-                fptsLines = fpts.readlines()            
-                print(pts_name, len(fptsLines))
+
                 for n in range(key_nums):
                     fpts_line = fptsLines[n + 3].strip().split(' ')
                     if (key_nums - 1) == n:

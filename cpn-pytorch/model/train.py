@@ -33,7 +33,7 @@ def main(args):
 
     # create model
     model = network.__dict__[cfg.model](cfg.output_shape, cfg.num_class, pretrained = True)
-    model = torch.nn.DataParallel(model).cuda()
+    model = torch.nn.DataParallel(model, device_ids=args.gpus).cuda()
 
     # show net
     args.channels = 3
@@ -68,12 +68,13 @@ def main(args):
         logger.set_names(['Epoch', 'LR', 'Train Loss'])
 
     cudnn.benchmark = True
+    torch.backends.cudnn.enabled = True
     print('    Total params: %.2fMB' % (sum(p.numel() for p in model.parameters())/(1024*1024)*4))
 
     train_loader = torch.utils.data.DataLoader(
         #MscocoMulti(cfg),
         KPloader(cfg),
-        batch_size=cfg.batch_size*args.num_gpus)
+        batch_size=cfg.batch_size*len(args.gpus))
         #, shuffle=True,
         #num_workers=args.workers, pin_memory=True) 
 
@@ -126,8 +127,8 @@ def train(train_loader, model, criterions, optimizer):
         input_var = torch.autograd.Variable(inputs.cuda())
 
         target15, target11, target9, target7 = targets
-        refine_target_var = torch.autograd.Variable(target7.cuda(async=True))
-        valid_var = torch.autograd.Variable(valid.cuda(async=True))
+        refine_target_var = torch.autograd.Variable(target7.cuda(non_blocking=True))
+        valid_var = torch.autograd.Variable(valid.cuda(non_blocking=True))
 
         # compute output
         global_outputs, refine_output = model(input_var)
@@ -144,7 +145,7 @@ def train(train_loader, model, criterions, optimizer):
             global_label = label * (valid > 1.1).type(torch.FloatTensor).view(-1, num_points, 1, 1)
             #print(global_label, i_loss)
             #i_loss = i_loss + 1
-            global_loss = criterion1(global_output, torch.autograd.Variable(global_label.cuda(async=True))) / 2.0
+            global_loss = criterion1(global_output, torch.autograd.Variable(global_label.cuda(non_blocking=True))) / 2.0
             loss += global_loss
             global_loss_record += global_loss.data.item()
             
@@ -174,7 +175,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='PyTorch CPN Training')
     parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
                         help='number of data loading workers (default: 12)')
-    parser.add_argument('-g', '--num_gpus', default=1, type=int, metavar='N',
+    parser.add_argument('-g', '--gpus', default=[0, 2, 3], type=list, metavar='N',
                         help='number of GPU to use (default: 1)')    
     parser.add_argument('--epochs', default=1280, type=int, metavar='N',
                         help='number of total epochs to run (default: 32)')
