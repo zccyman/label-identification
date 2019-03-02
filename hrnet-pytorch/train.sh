@@ -1,0 +1,1 @@
+python tools/train.py --cfg experiments/PTS/w48_256x192_adam_lr1e-3.yaml
