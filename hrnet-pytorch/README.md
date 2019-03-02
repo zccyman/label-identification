@@ -9,6 +9,9 @@
 
 ### Train Model
 
+- pre-model: 
+    - lib/models/pytorch/imagenet/[pose_hrnet_w48_256x192.pth](https://onedrive.live.com/?authkey=%21AEwfaSueYurmSRA&id=56B9F9C97F261712%2111776&cid=56B9F9C97F261712)
+
 ```
 sh train.sh
 ```
