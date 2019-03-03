@@ -4,15 +4,16 @@ import torch
 from .globalNet import globalNet
 from .refineNet import refineNet
 
-__all__ = ['CPN50', 'CPN101']
+__all__ = ['CPN18', 'CPN50', 'CPN101']
 
 class CPN(nn.Module):
-    def __init__(self, resnet, output_shape, num_class, pretrained=True):
+    def __init__(self, resnet, channel_settings, output_shape, num_class, pretrained=True):
         super(CPN, self).__init__()
-        channel_settings = [2048, 1024, 512, 256]
+        self.channel_settings_gloabl = channel_settings[0]
         self.resnet = resnet
-        self.global_net = globalNet(channel_settings, output_shape, num_class)
-        self.refine_net = refineNet(channel_settings[-1], output_shape, num_class)
+        self.global_net = globalNet(self.channel_settings_gloabl, output_shape, num_class)
+        self.channel_settings_refine = channel_settings[1] #= [2048, 1024, 512, 256]
+        self.refine_net = refineNet(self.channel_settings_refine[-1], output_shape, num_class)
 
     def forward(self, x):
         res_out = self.resnet(x)
@@ -21,12 +22,17 @@ class CPN(nn.Module):
 
         return global_outs, refine_out
 
-def CPN50(out_size,num_class,pretrained=True):
-    res50 = resnet50(pretrained=pretrained)
-    model = CPN(res50, output_shape=out_size,num_class=num_class, pretrained=pretrained)
+def CPN18(channel_settings, out_size,num_class,pretrained=True):
+    res18 = resnet18(pretrained=pretrained)
+    model = CPN(res18, channel_settings=channel_settings, output_shape=out_size,num_class=num_class, pretrained=pretrained)
     return model
 
-def CPN101(out_size,num_class,pretrained=True):
+def CPN50(channel_settings, out_size,num_class,pretrained=True):
+    res50 = resnet50(pretrained=pretrained)
+    model = CPN(res50, channel_settings=channel_settings, output_shape=out_size,num_class=num_class, pretrained=pretrained)
+    return model
+
+def CPN101(channel_settings, out_size,num_class,pretrained=True):
     res101 = resnet101(pretrained=pretrained)
-    model = CPN(res101, output_shape=out_size,num_class=num_class, pretrained=pretrained)
+    model = CPN(res101, channel_settings=channel_settings, output_shape=out_size,num_class=num_class, pretrained=pretrained)
     return model

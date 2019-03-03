@@ -67,10 +67,19 @@ class globalNet(nn.Module):
                 feature = self.laterals[i](x[i]) + up
             global_fms.append(feature)
 
+            #print("i:", i, " input: ", x[i].shape)
+            #print("i:", i, " global_fms feature: ", feature.shape)
+
             if i != len(self.channel_settings) - 1:
                 up = self.upsamples[i](feature)
-                
+
+            #print("i: ", i, " channels: ", self.channel_settings[i])
+            #print("i:", i, " up feature: ", up.shape)
+            #input()
+
             feature = self.predict[i](feature)
+            #print("i:", i, " global_outs feature: ", feature.shape, "\n\n")
+
             global_outs.append(feature)
 
         return global_fms, global_outs

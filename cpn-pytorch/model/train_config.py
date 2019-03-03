@@ -13,7 +13,8 @@ class Config:
     root_dir = os.path.join(cur_dir, '..')
 
     vis = 0
-    model = 'CPN50'
+    model = 'CPN18'
+    channel_settings = [[512, 256, 128, 64], [2048, 1024, 512, 256]] #'CPN18'
 
     lr = 0.1
     lr_gamma = 0.1
