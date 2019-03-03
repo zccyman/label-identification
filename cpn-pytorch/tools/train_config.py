@@ -11,7 +11,8 @@ class Config:
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     this_dir_name = cur_dir.split('/')[-1]
     root_dir = os.path.join(cur_dir, '..')
-
+    lib_path = os.path.join(root_dir, 'lib')
+	
     vis = 0
     model = 'CPN18'
     channel_settings = [[512, 256, 128, 64], [2048, 1024, 512, 256]] #'CPN18'
@@ -51,4 +52,5 @@ class Config:
 
 cfg = Config()
 add_pypath(cfg.root_dir)
+add_pypath(cfg.lib_path)
 

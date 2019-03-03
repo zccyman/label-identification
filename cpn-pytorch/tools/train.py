@@ -21,12 +21,33 @@ from networks import network
 from dataloader.KPloader import KPloader
 from adabound import AdaBound
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='PyTorch CPN Training')
+    parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
+                        help='number of data loading workers (default: 12)')
+    parser.add_argument('-g', '--gpus', default=[0], type=list, metavar='N',
+                        help='number of GPU to use (default: 1)')    
+    parser.add_argument('--epochs', default=1280, type=int, metavar='N',
+                        help='number of total epochs to run (default: 32)')
+    parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
+                        help='manual epoch number (useful on restarts)')
+    parser.add_argument('-c', '--checkpoint', default='checkpoint', type=str, metavar='PATH',
+                        help='path to save checkpoint (default: checkpoint)')
+    parser.add_argument('--resume', default='', type=str, metavar='PATH',
+                        help='path to latest checkpoint')
+
+    args = parser.parse_args()
+
+    return args
+
 def net_vision(model, args):
     input = torch.rand(1, args.channels, args.height, args.width)
     g = make_dot(model(input), params=dict(model.named_parameters()))
     g.view()
 
-def main(args):
+def main():
+    args = parse_args()
+
     # create checkpoint dir
     if not isdir(args.checkpoint):
         mkdir_p(args.checkpoint)
@@ -100,8 +121,6 @@ def main(args):
 
     logger.close()
 
-
-
 def train(train_loader, model, criterions, optimizer):
     # prepare for refine loss
     def ohkm(loss, top_k):
@@ -172,19 +191,4 @@ def train(train_loader, model, criterions, optimizer):
     return losses.avg
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='PyTorch CPN Training')
-    parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
-                        help='number of data loading workers (default: 12)')
-    parser.add_argument('-g', '--gpus', default=[0], type=list, metavar='N',
-                        help='number of GPU to use (default: 1)')    
-    parser.add_argument('--epochs', default=1280, type=int, metavar='N',
-                        help='number of total epochs to run (default: 32)')
-    parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
-                        help='manual epoch number (useful on restarts)')
-    parser.add_argument('-c', '--checkpoint', default='checkpoint', type=str, metavar='PATH',
-                        help='path to save checkpoint (default: checkpoint)')
-    parser.add_argument('--resume', default='', type=str, metavar='PATH',
-                        help='path to latest checkpoint')
-
-
-    main(parser.parse_args())
+    main()
