@@ -53,7 +53,8 @@ class refineNet(nn.Module):
         for i in range(num_cascade):
             cascade.append(self._make_layer(lateral_channel, num_cascade-i-1, out_shape))
         self.cascade = nn.ModuleList(cascade)
-        self.final_predict = self._predict(4*lateral_channel, num_class)
+        #self.final_predict = self._predict(4*lateral_channel, num_class) #concat
+        self.final_predict = self._predict(1*lateral_channel, num_class)
 
     def _make_layer(self, input_channel, num, output_shape):
         layers = []
