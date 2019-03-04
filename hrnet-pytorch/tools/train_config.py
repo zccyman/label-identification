@@ -26,8 +26,8 @@ class Config:
 
     num_class = 20 #17
     
-    img_path = os.path.join(root_dir, 'data', 'train')
-    csv_file_path = root_dir + "/data/train.csv"
+    img_path = os.path.join(root_dir, '../data', 'origin')
+    csv_file_path = os.path.join(root_dir, "../data/train.csv")
     
     symmetry = [(1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12), (13, 14), (15, 16)]
     bbox_extend_factor = (0.1, 0.15) # x, y
