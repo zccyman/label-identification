@@ -3,7 +3,7 @@
 ## Train Model with PTS DataFormat
 
 ### Prepare data
-- hrnet-pytorch/data/train/
+- ../hrnet-pytorch/data/origin/
     - *.jpg
     - *.pts
 
