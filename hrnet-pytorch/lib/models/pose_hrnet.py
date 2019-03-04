@@ -423,13 +423,18 @@ class PoseHighResolutionNet(nn.Module):
         return nn.Sequential(*modules), num_inchannels
 
     def forward(self, x):
+        #print("input: ", x.shape)
+
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
+        #print("conv1: ", x.shape)
         x = self.conv2(x)
         x = self.bn2(x)
         x = self.relu(x)
+        #print("conv2: ", x.shape)
         x = self.layer1(x)
+        #print("second: ", x.shape)
 
         x_list = []
         for i in range(self.stage2_cfg['NUM_BRANCHES']):
@@ -456,6 +461,7 @@ class PoseHighResolutionNet(nn.Module):
         y_list = self.stage4(x_list)
 
         x = self.final_layer(y_list[0])
+        #print("final_layer:", x.shape)
 
         return x
 
