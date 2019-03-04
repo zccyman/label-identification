@@ -74,9 +74,13 @@ class refineNet(nn.Module):
         refine_fms = []
         for i in range(4):
             refine_fms.append(self.cascade[i](x[i]))
-            #print("refine: ", i, " ", refine_fms[i].shape)
+           #print("refine: ", i, " ", refine_fms[i].shape)
+            if 0 == i:
+                out = refine_fms[0]
+            else:
+                out = out + refine_fms[i]
+
         #input("")
         #out = torch.cat(refine_fms, dim=1) #concat
-        out = torch.cat(refine_fms, dim=1) #concat
         out = self.final_predict(out)
         return out
