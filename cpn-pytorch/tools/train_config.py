@@ -12,7 +12,7 @@ class Config:
     this_dir_name = cur_dir.split('/')[-1]
     root_dir = os.path.join(cur_dir, '..')
     lib_path = os.path.join(root_dir, 'lib')
-	
+
     vis = 0
     model = 'CPN18'
     channel_settings = [[512, 256, 128, 64], [2048, 1024, 512, 256]] #'CPN18'
@@ -21,13 +21,13 @@ class Config:
     lr_gamma = 0.1
     lr_dec_epoch = list(range(6,2560,400))
 
-    batch_size = 16
+    batch_size = 2
     weight_decay = 1e-5
 
     num_class = 20 #17
     
-    img_path = os.path.join(root_dir, 'data', 'train')
-    csv_file_path = root_dir + "/data/train.csv"
+    img_path = os.path.join(root_dir, '../data', 'origin')
+    csv_file_path = os.path.join(root_dir, "../data/train.csv")
     
     symmetry = [(1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12), (13, 14), (15, 16)]
     bbox_extend_factor = (0.1, 0.15) # x, y
