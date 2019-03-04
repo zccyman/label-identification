@@ -3,14 +3,14 @@
 ## Train Model with PTS DataFormat
 
 ### Prepare data
-- cpn-pytorch/data/train/
+- ../cpn-pytorch/data/origin/
     - *.jpg
     - *.pts
 
 ### Train Model
 
 ```
-python model/train.py
+python tools/train.py
 ```
 
 ### Test Model
